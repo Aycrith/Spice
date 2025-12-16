@@ -9,6 +9,10 @@
 4. `docs/ops/RUNBOOK_v2.1.md` — Operating procedures, monthly rebalance workflow, SAFE MODE/HALT semantics
 5. `docs/risk/RISK_REGISTER_v2.1.md` — Risks, mitigations, drills, and monitoring signals
 
+## Ironclad planning + architecture package
+- `docs/package/INDEX.md` — Entry point
+- `docs/package/IRONCLAD_PACKAGE_v2.1.md` — Master document (sections 1–9)
+
 ## Operations supplements
 - `docs/ops/INCIDENT_RESPONSE.md` — Incident handling lifecycle and playbooks
 
@@ -32,6 +36,7 @@
 - `docs/adr/0004-timing-convention-close-to-open-vs-auction.md` — Proposed
 - `docs/adr/0005-mvp-universe-definition.md` — Proposed
 - `docs/adr/0006-research-integrity-pbo-cscv-threshold.md` — Proposed
+- `docs/adr/0007-no-cost-proof-of-concept-demo-path.md` — Proposed
 - Root governance: `GOVERNANCE.md`, `CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`
 
 ## Repo workflow (agents)

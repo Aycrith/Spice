@@ -12,3 +12,4 @@ Each item: Finding → Risk/GAP → Evidence/Example → Plan change → Validat
 6. Wash sale exposure → reporting / tax impact → wash sale guidance review → lot awareness + flagging → detection simulation.
 7. Strategy evidence baseline → insufficient rationale → literature-backed justification → explicit falsifiers + OOS gating → Stage 1–2 gates.
 8. Repo governance hardening → unmanaged plan drift → docs-as-code + ADR practice + primary sources index → add GOVERNANCE/CONTRIBUTING/SECURITY/AGENTS + PRIMARY_SOURCES + incident response playbook + agent workflow + stage status + PR template + CI guardrails → periodic doc QA gate (Stage 0).
+9. No-cost proof-of-concept constraint → risk of Stage 2 blockers (broker/data costs) → sponsor instruction (2025-12-16) + cost constraint tracking → introduce Decision Portfolio Demo path (SimBroker + free/legal data) and keep broker selection open → demo determinism + replay checks; Stage 2 remains broker-conformance gate.

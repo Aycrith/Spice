@@ -1,4 +1,4 @@
-# 0005: Research integrity (PBO/CSCV threshold)
+# 0006: Research integrity (PBO/CSCV threshold)
 
 - **Status:** Proposed
 - **Date:** 2025-12-15
