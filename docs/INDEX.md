@@ -34,5 +34,11 @@
 - `docs/adr/0006-research-integrity-pbo-cscv-threshold.md` — Proposed
 - Root governance: `GOVERNANCE.md`, `CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`
 
+## Repo workflow (agents)
+- `docs/quality/STAGE_STATUS.md` — Current stage gate (machine-readable); controls planning-only vs implementation
+- `docs/governance/BRANCHING_STRATEGY.md` — Branch naming + PR discipline
+- `docs/governance/IMPORT_SNAPSHOTS.md` — How to handle `*.import.md` files safely
+- `docs/agents/AGENT_WORKFLOW.md` — Agent checklist and safety rules
+
 ## Legacy / provenance
 - `docs/legacy/` — prior plan documents preserved for provenance

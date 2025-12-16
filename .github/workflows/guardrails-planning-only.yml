@@ -1,0 +1,96 @@
+name: Guardrails (planning-only)
+
+on:
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: List changed files
+        run: |
+          set -euo pipefail
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          echo "Base: $BASE_SHA"
+          echo "Head: $HEAD_SHA"
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" | tee changed_files.txt
+
+      - name: Enforce planning-only + no-overwrite guardrails
+        run: |
+          set -euo pipefail
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          # Read stage from BASE branch (prevents bypass by bumping stage in the same PR).
+          base_stage="1"
+          if git cat-file -e "$BASE_SHA:docs/quality/STAGE_STATUS.md" 2>/dev/null; then
+            stage_line="$(git show "$BASE_SHA:docs/quality/STAGE_STATUS.md" | grep -E '^stage:' | head -n 1 || true)"
+            stage_digits="$(echo "$stage_line" | tr -cd '0-9')"
+            if [ -n "$stage_digits" ]; then
+              base_stage="$stage_digits"
+            fi
+          fi
+
+          echo "Base branch stage: $base_stage"
+
+          # Guardrail 1: protected repo-root files must not be modified.
+          # (Non-negotiable: do not overwrite existing repo root files.)
+          protected_root_regex='^(README\.md|ROADMAP\.md|AGENTS\.md|CONTRIBUTING\.md|GOVERNANCE\.md|SECURITY\.md|\.gitignore)$'
+          if grep -E "$protected_root_regex" -n changed_files.txt; then
+            echo "ERROR: Protected repo-root file(s) modified. Do not edit root governance files via PRs."
+            exit 1
+          fi
+
+          # Guardrail 2: large binaries / archives must not be committed.
+          # (Even if gitignore exists, this prevents accidental adds.)
+          if grep -Ei -n '\.(tar\.gz|tar|gz|zip|7z|pdf)$' changed_files.txt; then
+            echo "ERROR: Binary/archive/PDF files must not be committed. Keep them untracked/ignored."
+            exit 1
+          fi
+
+          # Guardrail 3: planning-only until Stage 2 is passed on main.
+          if [ "$base_stage" -lt 2 ]; then
+            if grep -Ev '^(docs/|\.github/)' changed_files.txt | grep -q .; then
+              echo "ERROR: Repo is planning-only until Stage 2. Only docs/** and .github/** changes are allowed."
+              echo "Disallowed paths in this PR:"
+              grep -Ev '^(docs/|\.github/)' changed_files.txt || true
+              exit 1
+            fi
+          fi
+
+          # Guardrail 4: stage bump PRs must be docs-only.
+          if grep -qx 'docs/quality/STAGE_STATUS.md' changed_files.txt; then
+            head_stage="$base_stage"
+            if git cat-file -e "$HEAD_SHA:docs/quality/STAGE_STATUS.md" 2>/dev/null; then
+              stage_line="$(git show "$HEAD_SHA:docs/quality/STAGE_STATUS.md" | grep -E '^stage:' | head -n 1 || true)"
+              stage_digits="$(echo "$stage_line" | tr -cd '0-9')"
+              if [ -n "$stage_digits" ]; then
+                head_stage="$stage_digits"
+              fi
+            fi
+
+            echo "Head stage (from PR): $head_stage"
+
+            if [ "$head_stage" -gt "$base_stage" ]; then
+              if grep -Ev '^docs/' changed_files.txt | grep -q .; then
+                echo "ERROR: Stage advancement PRs must be docs-only (no .github, no code)."
+                exit 1
+              fi
+            fi
+          fi
+
+          echo "Guardrails OK."
