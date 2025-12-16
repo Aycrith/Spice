@@ -37,7 +37,7 @@ Each PR must include:
 - **Validation method + thresholds** (reference `docs/validation/VALIDATION_MATRIX_v2.1.md`)
 - **Traceability Index update** (`docs/validation/TRACEABILITY_INDEX_v2.1.md`) for any material change
 
-A PR template in `.github/pull_request_template.md` standardizes this.
+ A PR template in `.github/PULL_REQUEST_TEMPLATE.md` standardizes this.
 
 ## Import workflow (safe, non-overwriting)
 

@@ -38,7 +38,7 @@ If you are importing artifacts:
 
 ## Pull request requirements
 
-Follow `.github/pull_request_template.md`.
+Follow `.github/PULL_REQUEST_TEMPLATE.md`.
 
 Minimum acceptance checks per PR:
 

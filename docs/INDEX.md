@@ -39,6 +39,8 @@
 - `docs/governance/BRANCHING_STRATEGY.md` — Branch naming + PR discipline
 - `docs/governance/IMPORT_SNAPSHOTS.md` — How to handle `*.import.md` files safely
 - `docs/agents/AGENT_WORKFLOW.md` — Agent checklist and safety rules
+- `docs/agents/AGENT_GIT_AUTOMATION.md` — Agent-owned PR/checks/merge automation model
+- `docs/agents/AGENT_PERMISSIONS.md` — One-time permissions bootstrap for IDE agents
 
 ## Legacy / provenance
 - `docs/legacy/` — prior plan documents preserved for provenance
