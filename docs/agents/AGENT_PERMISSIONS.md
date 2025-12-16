@@ -48,6 +48,8 @@ To make automation reliable even if the default `GITHUB_TOKEN` is restricted, se
 
 - Secret name: `AGENT_GH_TOKEN`
 
+Store only the raw token value in the secret (do **not** include a `AGENT_GH_TOKEN=` prefix).
+
 This token is used by:
 
 - `.github/workflows/agent-auto-pr.yml` (create PRs + labels)
