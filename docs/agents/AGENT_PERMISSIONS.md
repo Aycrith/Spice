@@ -36,31 +36,24 @@ Repository setting (GitHub UI):
   - Select **Read and write permissions**
   - (Optional) allow Actions to create and approve pull requests
 
+If you don't see this, make sure you're in the repository (not your user settings), and that your account has admin access to the repo.
+
 These permissions allow the automation workflows to:
 
 - create PRs
 - apply labels
 - merge PRs
 
-### C) Recommended: set a repo secret for agent automation (one-time)
+### C) Secrets (optional)
 
-To make automation reliable even if the default `GITHUB_TOKEN` is restricted, set a repository secret:
+This repository is designed to work **without any PAT/App token** by using the built-in `GITHUB_TOKEN`.
 
-- Secret name: `AGENT_GH_TOKEN`
+If you previously created an `AGENT_GH_TOKEN` secret and it's not a valid token, remove it to avoid confusion.
 
-Store only the raw token value in the secret (do **not** include a `AGENT_GH_TOKEN=` prefix).
+Where to manage secrets:
 
-This token is used by:
-
-- `.github/workflows/agent-auto-pr.yml` (create PRs + labels)
-- `.github/workflows/agent-automerge.yml` (merge PRs)
-
-Token requirements (least privilege that still works):
-
-- For a classic PAT: **repo** scope (private) or appropriate public-repo scopes (public)
-- Alternatively: a GitHub App installation token with PR + contents write permissions
-
-This is a one-time bootstrap and avoids repeated interactive authentication for future agents.
+- Settings → Secrets and variables → Actions → **Secrets** tab
+   - New repository secret
 
 ## Branch protection / rulesets
 
