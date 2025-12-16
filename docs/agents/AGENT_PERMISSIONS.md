@@ -89,3 +89,6 @@ If an admin token is ever required, store it as a GitHub Secret in repo settings
 
 <!-- smoke: verify no-PAT automation works -->
 
+
+<!-- smoke: required checks verify -->
+
