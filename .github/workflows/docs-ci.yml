@@ -3,6 +3,20 @@ name: Docs CI (agent review)
 on:
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      base_sha:
+        description: Base commit SHA (typically main)
+        required: true
+        type: string
+      head_sha:
+        description: Head commit SHA to evaluate (typically PR head)
+        required: true
+        type: string
+      pr_number:
+        description: Optional PR number (for logging)
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -11,29 +25,31 @@ jobs:
   docs_ci:
     runs-on: ubuntu-latest
 
+    env:
+      BASE_SHA: ${{ github.event.inputs.base_sha || github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.inputs.head_sha || github.event.pull_request.head.sha }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ env.HEAD_SHA }}
+
+      - name: Ensure base/head commits are present
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --prune --depth=0 origin "$BASE_SHA" || true
+          git fetch --no-tags --prune --depth=0 origin "$HEAD_SHA" || true
 
       - name: Required artifacts check
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           python .github/scripts/required_artifacts_check.py
 
       - name: Traceability gate
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           python .github/scripts/traceability_gate.py
 
       - name: Markdown local link check
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           python .github/scripts/md_links_check.py
