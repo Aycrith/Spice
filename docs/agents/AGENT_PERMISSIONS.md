@@ -82,4 +82,12 @@ If you *do* require reviews, you must either:
 - Do not commit PATs, SSH keys, or tokens.
 - Do not add secrets to `.env` for this repository.
 
+### Security note: treat tokens as compromised if pasted
+
+If a token is ever pasted into chat, an issue, a PR description, or any log output:
+
+- Assume it is compromised.
+- Revoke/rotate it immediately.
+- Update the repository secret (for example `AGENT_GH_TOKEN`) to the rotated value.
+
 If an admin token is ever required, store it as a GitHub Secret in repo settings.
