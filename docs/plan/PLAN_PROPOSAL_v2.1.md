@@ -129,3 +129,6 @@ The following documents are normative and must remain consistent with this plan:
 - Traceability Index: `docs/validation/TRACEABILITY_INDEX_v2.1.md`
 - Open Questions: `docs/validation/OPEN_QUESTIONS_v2.1.md`
 - Risk Register: `docs/risk/RISK_REGISTER_v2.1.md`
+
+## References
+- Primary operational and research sources: `docs/references/PRIMARY_SOURCES.md`
