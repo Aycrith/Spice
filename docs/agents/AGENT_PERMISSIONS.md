@@ -67,6 +67,11 @@ Recommended required checks:
 - Guardrails (planning-only)
 - Docs CI (agent review)
 
+Status check contexts enforced on `main`:
+
+- `guardrails`
+- `docs_ci`
+
 If you *do* require reviews, you must either:
 
 - allow Actions/bot approvals to count, or
@@ -90,5 +95,4 @@ If an admin token is ever required, store it as a GitHub Secret in repo settings
 <!-- smoke: verify no-PAT automation works -->
 
 
-<!-- smoke: required checks verify -->
 
