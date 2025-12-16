@@ -1,0 +1,23 @@
+# Validation Matrix v2.1
+
+This matrix links identified risks or gaps to the evidence that informs them,
+the corresponding plan sections or changes, and the validation methods that
+confirm the mitigation is effective.  Maintain this matrix as a living
+document; every material change must update the appropriate row.
+
+| Risk / Gap | Evidence (primary sources) | Plan section / change | Validation method |
+| --- | --- | --- | --- |
+| **Missed closing auction deadlines** — orders entered too late could miss the auction or incur poor fills. | NYSE closing process: MOC/LOC orders must be entered by **3:50 PM**; cancellations restricted after **3:58 PM**【604093045262205†L93-L110】【826894920304809†L0-L53】. | Plan §1.3 mandates using MOC/LOC orders and submitting them by 3:50 PM ET on rebalance day. | Simulate monthly rebalances with mock orders; verify orders are sent before the cutoff.  Periodically review exchange rule updates. |
+| **Settlement funding shortfall** — failure to deliver cash or securities by settlement date may trigger margin calls. | SEC/FINRA announce T+1 settlement cycle effective 28 May 2024; payment and securities are due on the next business day【634620779460672†L263-L320】【228845885160452†L154-L200】. | Plan §1.5 sets funding schedule: initiate transfers two days before rebalance; ensure cash is available one day before trade date. | Conduct dry runs of funding process; verify that cash is credited in the account before trade date.  Document lead times for ACH or wire transfers. |
+| **Wash‑sale disallowed losses** — rotating into the same asset within 30 days of a loss sale can forfeit tax deductions. | IRS wash‑sale rule: selling a security at a loss and buying the same or substantially identical security within 30 days before or after the sale prohibits deducting the loss【774704392547939†L223-L239】; applies to stocks, bonds, ETFs and options【238476208366191†L190-L218】. | Plan §1.4 sets a minimum holding period of one month and avoids re‑entering identical ETFs within 30 days of a loss. | Backtest the strategy’s trades; flag any potential wash‑sale events.  Maintain a wash‑sale log and verify that the 30‑day window is respected. |
+| **Model overfitting** — in‑sample performance may not generalise. | CSCV/PBO algorithm partitions data into subperiods; PBO measures the fraction of times the in‑sample winner underperforms the out‑of‑sample median【639029512866022†L454-L557】【639029512866022†L590-L618】. | Plan §1.6 requires computing PBO and rejecting models with **PBO > 0.05**.  Use CSCV to select lookback window and number of assets. | Implement CSCV on historical data; compute PBO.  Document results and confirm PBO below threshold. |
+| **Momentum crash risk** — large negative returns during market rebounds. | Momentum strategies experience infrequent but severe crashes after market declines and when volatility is high【535019668254404†L50-L66】; exposures to high‑beta losers cause drawdowns【535019668254404†L92-L190】. | Plan §1.7 introduces risk mitigations: no shorting, cap position size at 60 %, maintain cash buffer, scale down during high volatility. | Backtest the strategy across historical crash periods (e.g., 2009).  Evaluate drawdowns with and without mitigations.  Update mitigations based on findings. |
+| **Broker support for order types** — broker may not support MOC/LOC for certain ETFs. | Broker documentation (to be researched) and exchange rules. | Plan §2 (operational considerations) notes that broker support must be confirmed.  Add an open question if unclear. | Contact broker support or consult official docs; conduct a test order with small size.  Record results in the Traceability Index. |
+| **Data quality issues** — incorrect or missing price data can affect rankings. | Primary data should include corporate actions and delistings; data provider docs. | Plan §2 instructs selection of a reliable data provider and defines data freeze time at 2:30 PM. | Validate data by cross‑checking against a secondary source.  Maintain automated sanity checks (e.g., returns within plausible bounds). |
+| **Security of secrets** — leakage of API keys or credentials. | SECURITY.md: keep secrets in local files; never commit them; ensure auditability and incident response【813758299569681†L4-L22】. | Plan §2 emphasises adherence to SECURITY.md and logging. | Periodic security audits; confirm that no secrets are stored in the repository. |
+
+## Process
+
+1. When new evidence surfaces (e.g., updated settlement cycles), add a row to the matrix and link it to the plan.
+2. For each risk, define a **validation method** that can be executed before deployment.
+3. Maintain alignment with the **Traceability Index**, which cross‑references plan sections and evidence.
