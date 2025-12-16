@@ -42,6 +42,24 @@ These permissions allow the automation workflows to:
 - apply labels
 - merge PRs
 
+### C) Recommended: set a repo secret for agent automation (one-time)
+
+To make automation reliable even if the default `GITHUB_TOKEN` is restricted, set a repository secret:
+
+- Secret name: `AGENT_GH_TOKEN`
+
+This token is used by:
+
+- `.github/workflows/agent-auto-pr.yml` (create PRs + labels)
+- `.github/workflows/agent-automerge.yml` (merge PRs)
+
+Token requirements (least privilege that still works):
+
+- For a classic PAT: **repo** scope (private) or appropriate public-repo scopes (public)
+- Alternatively: a GitHub App installation token with PR + contents write permissions
+
+This is a one-time bootstrap and avoids repeated interactive authentication for future agents.
+
 ## Branch protection / rulesets
 
 To keep the process agent-only, configure `main` so that merges require:
