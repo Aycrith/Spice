@@ -1,9 +1,27 @@
-# Agent Operating Contract (for future implementation agents)
+# Agent Operating Contract
 
-Any agent acting on this repository must:
-1. Start with `docs/INDEX.md`.
-2. Treat `docs/plan/PLAN_PROPOSAL_v2.1.md` and `docs/quality/ACCEPTANCE_CRITERIA_v2.1.md` as authoritative.
-3. Maintain traceability: every proposal must update `docs/validation/VALIDATION_MATRIX_v2.1.md` and `docs/validation/TRACEABILITY_INDEX_v2.1.md`.
-4. Use ADRs for any architecturally significant decision. citeturn0search12turn0search0
-5. Never introduce “intent drift.” Optional extensions must be explicitly labeled and gated.
+This file is the minimal operating contract for any agent (human or AI) working in this repository.
 
+## Non-negotiables
+
+1. **No intent drift:** the MVP remains Cross-Asset Momentum Rotation (monthly).
+2. **Planning-first:** until Stage 2 gates are passed, treat this repo as planning-only.
+3. **Traceability:** any material change must map: Finding → Risk/GAP → Evidence/Example → Plan change → Validation method.
+4. **No silent assumptions:** if unsure, log it in Open Questions with a resolution path.
+
+## Required reading order
+
+1. `docs/INDEX.md`
+2. `docs/plan/PLAN_PROPOSAL_v2.1.md`
+3. `docs/validation/VALIDATION_MATRIX_v2.1.md`
+4. `docs/quality/ACCEPTANCE_CRITERIA_v2.1.md`
+5. `docs/ops/RUNBOOK_v2.1.md`
+
+## Standard deliverable format for changes
+
+For any update, include:
+- What changed (file + section)
+- Why (risk/gap)
+- Evidence used (link to `docs/references/PRIMARY_SOURCES.md`)
+- Validation method + acceptance threshold
+- Traceability Index entry

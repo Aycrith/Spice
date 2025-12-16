@@ -1,23 +1,23 @@
 # Security
 
-This project is intended to run locally. Security here primarily means **protecting broker credentials, preserving auditability, and preventing silent failure**.
+This project is intended to run on a **single workstation** and interact with brokerage infrastructure. Security requirements are therefore practical and operational.
 
-## 1) Secrets handling
-- Never commit secrets. Use `.env` (excluded by `.gitignore`) and a dedicated `secrets/` directory (also ignored).
-- Prefer least-privilege credentials and account-level restrictions.
+## Secrets handling
 
-## 2) Auditability and integrity
-- Maintain tamper-evident logs (e.g., hash chaining) and immutable ledgers.
-- Preserve decision provenance (DataSnapshot/DecisionRecord hashes) for post-incident analysis.
+- **Never commit secrets** (API keys, tokens, session cookies, account numbers, statements). See `.gitignore`.
+- Store secrets locally in one of the following:
+  - OS credential store, or
+  - encrypted secret file (local-only), or
+  - environment variables loaded at runtime (later),
+  - with strict access controls.
 
-## 3) Incident response model
-Use an incident lifecycle aligned to NIST incident response guidance (Preparation; Detection/Analysis; Containment/Eradication/Recovery; Post-Incident Activity). citeturn0search25
+## Auditability and tamper evidence
 
-Trading-specific incidents include:
-- data staleness / corruption
-- broker outage or order rejects
-- reconciliation breaks
-- unexpected strategy behavior (drift vs backtest)
+- All trading decisions must be traceable to immutable inputs (snapshot hash + decision record).
+- Logs should be treated as evidence; tamper-evidence (hash chaining) is recommended once implementation begins.
 
-Runbook mapping is documented in `docs/ops/INCIDENT_RESPONSE.md`.
+## Incident response alignment
 
+Operational incident response should follow a structured lifecycle (Preparation; Detection/Analysis; Containment/Eradication/Recovery; Post-Incident Activity), consistent with NIST incident response guidance.
+
+See `docs/ops/INCIDENT_RESPONSE.md` for trading-specific incident playbooks.

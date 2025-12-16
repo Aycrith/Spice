@@ -1,25 +1,41 @@
-# 0002: Broker and account type selection
+# 0002: Broker and account selection
 
-## Status
-Proposed
+- **Status:** Proposed
+- **Date:** 2025-12-15
 
 ## Context
-Broker and account type (cash vs margin) determine available order types, cutoffs, fractional share support, buying power rules, and operational constraints under T+1 settlement. citeturn1search9turn1search13
+The plan requires a broker that supports:
+- ETF trading
+- reliable API or automation interface
+- sufficient order types for safety (e.g., market-with-protection, limit orders)
+- operational transparency for fills, rejections, and account state
 
-## Decision
-TBD.
+Broker choice constrains execution mechanics, data access, reconciliation, and security controls.
 
-## Options
-1. IBKR (cash)
-2. IBKR (margin, no leverage policy)
-3. Other broker (to be evaluated)
+## Decision (pending)
+Select the brokerage and account type that will be used for MVP live trading.
+
+## Options (non-exhaustive)
+1. **Interactive Brokers (IBKR)**
+   - Pros: broad order types, mature APIs, wide market access.
+   - Cons: operational complexity; account permissions and platform constraints to verify.
+2. **Other U.S. retail brokers**
+   - Pros: simpler UX.
+   - Cons: limited automation and order-type constraints; often weaker audit/reconciliation hooks.
 
 ## Decision drivers
-- Order type availability and constraints
-- Operational reliability (API, stability)
-- Fees, minimums, and reporting quality
+- API capability and stability
+- Order type availability and cutoff behavior
+- Fees and constraints relevant to small AUM
+- Security posture (2FA, token management)
+
+## What would change the decision
+- Evidence that the selected broker cannot meet required order safety / automation constraints.
 
 ## Validation
-- Paper tests of the intended order policy and rejection behavior
-- Documented cutoff schedule and enforcement plan
+- Confirm broker documentation for order types and any relevant cutoffs.
+- Paper trading conformance tests must demonstrate acceptable drift vs backtest.
 
+## References
+- IBKR Order Types overview: https://www.interactivebrokers.com/en/trading/ordertypes.php
+- IBKR API order types reference: https://www.interactivebrokers.com/campus/ibkr-api-page/order-types/

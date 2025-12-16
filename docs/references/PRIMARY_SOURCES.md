@@ -1,33 +1,62 @@
-# Primary Sources and References (Authoritative)
+# Primary Sources and Authoritative References
 
-This repository relies on primary/authoritative sources for market mechanics, settlement, tax rules, and research methodology.
+This file centralizes the primary/authoritative sources that underpin operational constraints and research-methodology requirements.
 
-## 1) Exchange auction rules and cutoffs
-- NYSE Closing Process Fact Sheet (MOC/LOC entry/cancel windows): citeturn1search4
-- NYSE Opening and Closing Auctions Fact Sheet (MOC/LOC restrictions): citeturn1search8
+## Exchange auctions and cutoff rules
 
-## 2) Broker order types and constraints
-- Interactive Brokers Order Types overview: citeturn2search2
-- IBKR API order types documentation: citeturn2search10
+### NYSE
+- **NYSE Closing Process (fact sheet, PDF)** — Market-on-Close (MOC) and Limit-on-Close (LOC) entry/cancel constraints and key times.
+  - Source: https://www.nyse.com/publicdocs/nyse/NYSE_Auctions_Closing_Process_Fact_Sheet.pdf
+- **NYSE Opening and Closing Auctions (fact sheet, PDF)** — Updated ruleset summary for auctions.
+  - Source: https://www.nyse.com/publicdocs/nyse/markets/nyse/NYSE_Opening_and_Closing_Auctions_Fact_Sheet.pdf
 
-## 3) Settlement cycle (T+1)
-- SEC investor bulletin on T+1 settlement (compliance May 28, 2024): citeturn1search9
-- SEC FAQ on T+1 (Rule 15c6-1): citeturn1search13
-- SEC press release/statement on implementation: citeturn1search1
+### Nasdaq
+- **The Nasdaq Opening and Closing Crosses (quick guide, PDF)** — Key cutoffs for MOO/MOC and LOO/LOC.
+  - Source: https://www.nasdaqtrader.com/content/technicalsupport/specifications/TradingProducts/openclosequickguide.pdf
+- **Nasdaq crosses FAQs (PDF)** — Detailed Q&A on cutoffs and behavior.
+  - Source: https://nasdaqtrader.com/content/productsservices/trading/crosses/openclose_faqs.pdf
 
-## 4) Wash sale rules
-- IRS Publication 550 (PDF): citeturn1search2
+## Broker documentation (order types and constraints)
 
-## 5) Research integrity / overfitting
-- Bailey et al., “The Probability of Backtest Overfitting” (PDF): citeturn1search3
+### Interactive Brokers (IBKR)
+- **Order Types and Algos (landing page)** — catalog of broker-supported order types.
+  - Source: https://www.interactivebrokers.com/en/trading/ordertypes.php
+- **IBKR API Order Types** — API-facing documentation for order types and minimal required fields.
+  - Source: https://www.interactivebrokers.com/campus/ibkr-api-page/order-types/
 
-## 6) Known momentum failure modes
-- Daniel & Moskowitz, “Momentum Crashes” (NBER PDF): citeturn2search0
+## Settlement (U.S. T+1)
 
-## 7) Time-frontier / lookahead bias patterns (reference model)
-- QuantConnect time modeling (Time Frontier / bar timestamps): citeturn2search5turn2search1
+### U.S. Securities and Exchange Commission (SEC)
+- **Investor.gov bulletin: New T+1 settlement cycle** — compliance date and investor-facing impact.
+  - Source: https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins/new-t1-settlement-cycle-what-investors-need-know-investor-bulletin
+- **SEC FAQ: Shortening the Securities Transaction Settlement Cycle** — regulatory FAQ on the change.
+  - Source: https://www.sec.gov/exams/educationhelpguidesfaqs/t1-faq
 
-## 8) Venue examples for open/close mechanics (Nasdaq)
-- Nasdaq Opening and Closing Crosses quick guide (LOO rules, cutoffs): citeturn2search3
-- Nasdaq Opening/Closing Cross FAQs (cutoff rejection behavior): citeturn2search11
+## Tax (wash sales)
 
+### Internal Revenue Service (IRS)
+- **IRS Publication 550 (PDF)** — wash sale rules ("substantially identical", 30-day window) and related tax mechanics.
+  - Source: https://www.irs.gov/pub/irs-pdf/p550.pdf
+
+## Research integrity and methodology
+
+### Backtest overfitting controls (CSCV / PBO)
+- **Bailey et al., "The Probability of Backtest Overfitting" (PDF)** — foundational paper for PBO/CSCV framing.
+  - Source: https://www.davidhbailey.com/dhbpapers/backtest-prob.pdf
+
+### Momentum crash regimes
+- **Daniel & Moskowitz, "Momentum Crashes" (NBER PDF)** — documented crash regimes and partial forecastability characteristics.
+  - Source: https://www.nber.org/system/files/working_papers/w20439/w20439.pdf
+
+### Anti-lookahead / time-frontier modeling (reference model)
+- **QuantConnect: Understanding Time** — illustrates bar availability vs timestamps and the risk of lookahead from daily bars.
+  - Source: https://www.quantconnect.com/docs/v1/key-concepts/understanding-time
+- **QuantConnect: Time Modeling (Periods / Time Frontier / TimeSlices)** — explicit guidance on avoiding lookahead bias.
+  - Sources:
+    - https://www.quantconnect.com/docs/v2/writing-algorithms/key-concepts/time-modeling/periods
+    - https://www.quantconnect.com/docs/v2/writing-algorithms/key-concepts/time-modeling/timeslices
+
+## Notes
+
+- Treat these sources as the starting point for binding operational assumptions.
+- Any contradictory source discovered later must be recorded in the Open Questions log and resolved via an ADR.

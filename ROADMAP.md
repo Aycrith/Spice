@@ -1,18 +1,35 @@
-# Roadmap (Planning-First)
+# Roadmap (Planning → Architecture → Implementation)
 
-This roadmap sequences the remaining **research and validation** so implementation can begin with minimal ambiguity.
+This roadmap is intentionally **planning-heavy**. The objective is to finish a research-backed, operationally realistic plan before any build work.
 
-## Near-term (next planning iteration)
-1. Resolve P0 Open Questions (broker/account type, data provider semantics, universe symbols, venue+cutoffs).
-2. Produce ADRs for the locked decisions.
-3. Update Validation Matrix rows with **primary source links** and acceptance thresholds.
-4. Expand operational readiness: restore drills, missed-run detection design, reconciliation tolerances.
+## Stage alignment
 
-## Medium-term
-- Stage 0 completion (data QA + time-frontier tests)
-- Stage 1 completion (robustness + PBO/CSCV gating)
+Stages are defined in `docs/quality/ACCEPTANCE_CRITERIA_v2.1.md`.
 
-## Long-term
-- Stage 2 paper trading conformance plan
-- Stage 3 small-capital live readiness
+## Immediate focus: Research & Decision Lockdown (next iterations)
 
+1. **Primary sources closure**
+   - Verify exchange auction cutoffs and cancel/modify constraints (NYSE, Nasdaq).
+   - Verify broker order type support and broker-side cutoffs (IBKR).
+   - Verify settlement and funding impacts under U.S. T+1.
+   - Verify wash sale mechanics that affect rotation strategies.
+
+2. **Strategy research robustness**
+   - Define CSCV/PBO methodology parameters and pass/fail thresholds.
+   - Define momentum crash stress tests and HALT/SAFE MODE linkages.
+
+3. **Architecture invariants**
+   - Finalize conceptual interface contracts and ledger invariants.
+   - Finalize runbooks and recovery drills for a single-machine operator model.
+
+4. **Decision Records (ADRs)**
+   - Broker choice and account type assumptions.
+   - Data vendor(s) choice, adjustment policy, and timestamp discipline.
+   - Timing convention: Close→Open (default) vs MOC/LOC (gated).
+
+## Output discipline
+
+Every roadmap item must update:
+- the Validation Matrix,
+- the Traceability Index,
+- and (if needed) the Open Questions log.

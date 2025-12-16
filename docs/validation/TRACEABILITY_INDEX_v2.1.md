@@ -11,3 +11,4 @@ Each item: Finding → Risk/GAP → Evidence/Example → Plan change → Validat
 5. Settlement realism (T+1) → cash sequencing failures → verify account rules → settlement gate in Stage 2–3 → paper constraints tests.
 6. Wash sale exposure → reporting / tax impact → wash sale guidance review → lot awareness + flagging → detection simulation.
 7. Strategy evidence baseline → insufficient rationale → literature-backed justification → explicit falsifiers + OOS gating → Stage 1–2 gates.
+8. Repo governance hardening → unmanaged plan drift → docs-as-code + ADR practice + primary sources index → add GOVERNANCE/CONTRIBUTING/SECURITY/AGENTS + PRIMARY_SOURCES + incident response playbook → periodic doc QA gate (Stage 0).

@@ -1,32 +1,42 @@
 # Contributing (Docs-as-Code)
 
-This repository is a **planning and architecture** repo for a locally-run systematic trading system. It follows a **docs-as-code** model: documentation is versioned, reviewed, and tested for internal consistency the same way code would be. See the Write the Docs overview of “Docs as Code” for the underlying philosophy. citeturn0search5
+This repository is intentionally **planning-first**. Contributions are changes to documentation, research evidence, validation criteria, and governance artifacts.
 
-## 1) Golden rules
-1. **No implementation content** in core planning documents. (No code, no commit plans, no “build steps.”)
-2. **Traceability is mandatory:** every material change must be traceable through:
-   - `docs/validation/VALIDATION_MATRIX_v2.1.md`
-   - `docs/validation/TRACEABILITY_INDEX_v2.1.md`
-3. **No intent drift:** MVP remains **Cross-Asset Momentum Rotation (monthly)**.
+## Core workflow
 
-## 2) How to propose a change
-1. Identify the **Finding** and document it in the Validation Matrix (new row or updated row).
-2. Update the plan/runbook/config/acceptance criteria as needed.
-3. Add/Update an ADR if the change alters architecture, interfaces, NFRs, or strategy semantics.
+1. **Start with the index:** read `docs/INDEX.md` and identify the artifact(s) you are modifying.
+2. **Maintain traceability:** any material change must be reflected in:
+   - `docs/validation/VALIDATION_MATRIX_v2.1.md` (or the current version), and
+   - `docs/validation/TRACEABILITY_INDEX_v2.1.md`.
+3. **Record significant decisions as ADRs:** add/update a file under `docs/adr/`.
+4. **Update acceptance gates:** if the change affects phase readiness, update `docs/quality/ACCEPTANCE_CRITERIA_v2.1.md`.
+5. **Update open questions:** if the change resolves or introduces uncertainty, update `docs/validation/OPEN_QUESTIONS_v2.1.md`.
 
-## 3) ADR process
-We use the ADR format introduced by Michael Nygard (“Documenting Architecture Decisions”) and common ADR templates. citeturn0search12turn0search4turn0search0
+This repo follows a **Docs-as-Code** approach (documentation is version-controlled and reviewed like code). See Write the Docs for the underlying philosophy. 
 
-- ADRs live in: `docs/adr/`
-- Each ADR must state:
-  - Context
-  - Decision
-  - Alternatives considered
-  - Consequences
-  - Validation / what would falsify the decision
+## What counts as a “material change”
 
-## 4) Documentation versioning
-- The canonical planning artifacts are versioned (e.g., `v2.1`).
-- **Strategy changes** require a `strategy_version` bump and refreshed validation artifacts.
-- **Operational changes** require updated runbooks and operational acceptance checks.
+A change is material if it impacts any of:
+- Strategy behavior (universe, ranking, lookback, cadence, filters)
+- Timing convention (Close→Open vs MOC/LOC)
+- Risk policy (HALT/SAFE MODE conditions, drawdown gates)
+- Validation metrics and thresholds
+- Execution mechanics and broker constraints
 
+Material changes require:
+- **Strategy version bump** (recorded in Config Schema + ADR)
+- Updated robustness/validation plan in Acceptance Criteria
+
+## Evidence standards
+
+Prefer primary/authoritative sources for operational constraints:
+- Exchange auction/cutoff rules (NYSE/Nasdaq)
+- Broker documentation for order types and deadlines (e.g., IBKR)
+- Regulators for settlement rules (SEC T+1)
+- Tax authorities for wash sales (IRS Publication 550)
+
+Record sources in `docs/references/PRIMARY_SOURCES.md` and cite them in the affected artifacts.
+
+## ADR format
+
+Use the Nygard-style ADR structure (Status, Context, Decision, Consequences) as documented by Cognitect and the ADR community.

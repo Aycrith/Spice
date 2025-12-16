@@ -1,36 +1,57 @@
-# Governance and Change Control
+# Governance
 
-## 1) Purpose
-This file defines how the planning repository is managed so that future implementation agents can proceed deterministically and safely.
+This project is a **planning repository** for a personal, locally-run systematic trading system. Governance exists to prevent intent drift, preserve research integrity, and ensure operational realism.
 
-## 2) Roles (conceptual)
-- **Research + Systems Planning Lead:** maintains strategy validity, research integrity, and traceability.
-- **Implementation Agents (future):** build only what is specified and gated by acceptance criteria.
-- **Reviewer (optional):** sanity-checks risk, execution realism, and documentation coherence.
+## Roles (conceptual)
 
-## 3) Change classification
+- **Planning / Research Lead:** owns plan coherence, evidence standards, and acceptance criteria.
+- **Implementation Agents (later):** build strictly against the approved plan and stage gates.
+- **Operator:** executes the monthly rebalance and incident response runbooks.
+
+## Decision classification
+
 ### Strategy Change (requires strategy_version bump)
-Any modification that changes expected returns/risk profile or the semantics of trading decisions, including:
+Any change that affects portfolio behavior or expected return distribution, including:
 - universe membership
-- signal definition / lookback
-- ranking/selection rules
+- signal definition (ranking, lookback)
 - rebalance cadence
-- core risk controls that alter exposure
+- filters/eligibility rules
+- defensive asset logic
+- risk policy affecting exposure
 
-### Operational Change (no strategy_version bump, but still governed)
-Any modification that changes operations but not strategy semantics, including:
-- scheduling, logging, alerting
+Required artifacts to update:
+- `docs/plan/PLAN_PROPOSAL_*`
+- `docs/config/CONFIG_SCHEMA_CONCEPTUAL_*`
+- `docs/quality/ACCEPTANCE_CRITERIA_*`
+- `docs/validation/VALIDATION_MATRIX_*`
+- `docs/validation/TRACEABILITY_INDEX_*`
+- ADR documenting the decision
+
+### Operational Change (no strategy_version bump)
+Changes that affect how the system runs but not the trading logic, including:
+- scheduling times
+- logging/observability settings
 - backup cadence
-- broker connectivity/retry policy (unless it changes execution timing semantics)
+- alerting mechanisms
 
-## 4) Decision locks
-Decisions that are “locked” must be captured in ADRs. Changing a locked decision requires:
-- explicit rationale
-- updated Validation Matrix rows
-- re-validation per Acceptance Criteria
+Required artifacts to update:
+- Runbook
+- Config schema (if new settings)
+- Traceability index (if material to reliability)
 
-## 5) Documentation authority
-- Canonical plan: `docs/plan/PLAN_PROPOSAL_v2.1.md`
-- Canonical gates: `docs/quality/ACCEPTANCE_CRITERIA_v2.1.md`
-- Canonical traceability: `docs/validation/VALIDATION_MATRIX_v2.1.md` + `TRACEABILITY_INDEX_v2.1.md`
+## Stage gate authority
 
+No progression to the next stage is allowed unless the current stage acceptance criteria are met and recorded.
+
+## Documentation versioning
+
+- Plan artifacts are versioned (e.g., v2.1). A doc version bump indicates a coherent planning update.
+- Strategy changes also require a strategy_version bump.
+
+## Review discipline
+
+Even for a solo project, treat changes as if they are reviewed:
+- summarize what changed
+- state the rationale
+- show which acceptance criteria and validation matrix rows were affected
+- record any new open questions
