@@ -12,7 +12,7 @@ Agents need two capability buckets:
 
 2. **PR/merge permission** (inside GitHub)
    - Handled by GitHub Actions using the repository `GITHUB_TOKEN`.
-   - This repo provides workflows to open PRs and merge PRs automatically.
+   - This repo provides workflows to open PRs and merge PRs automatically (no PAT required).
 
 ## One-time setup (recommended)
 

@@ -11,7 +11,7 @@ on:
       - "agent/**"
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
   issues: write
   actions: write
@@ -132,3 +132,97 @@ jobs:
                 inputs,
               });
             }
+
+      - name: Wait for checks then merge (automerge)
+        if: ${{ steps.pr.outputs.pr_number != '' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = Number('${{ steps.pr.outputs.pr_number }}');
+            const branch = '${{ steps.pr.outputs.branch }}';
+
+            // Re-fetch PR to get latest SHAs and labels.
+            const prResp = await github.rest.pulls.get({ owner, repo, pull_number: prNumber });
+            const pr = prResp.data;
+            const baseSha = pr.base.sha;
+            const headSha = pr.head.sha;
+            const labels = (pr.labels || []).map(l => l.name);
+
+            core.info(`Evaluating auto-merge for PR #${prNumber} (${branch})`);
+            core.info(`  base: ${baseSha}`);
+            core.info(`  head: ${headSha}`);
+
+            if (!labels.includes('automerge')) {
+              core.info('PR is not labeled automerge; skipping merge.');
+              return;
+            }
+
+            // Poll for the two required check runs on the PR head SHA.
+            const required = new Set(['guardrails', 'docs_ci']);
+            const deadlineMs = Date.now() + 10 * 60 * 1000; // 10 minutes
+            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+            async function getConclusions() {
+              const checks = await github.rest.checks.listForRef({ owner, repo, ref: headSha });
+              const runs = checks.data.check_runs || [];
+              const map = new Map();
+              for (const r of runs) {
+                if (!required.has(r.name)) continue;
+                // Normalize: status is queued/in_progress/completed; conclusion can be null until completed.
+                map.set(r.name, { status: r.status, conclusion: r.conclusion });
+              }
+              return map;
+            }
+
+            while (true) {
+              const conc = await getConclusions();
+
+              const missing = [...required].filter(n => !conc.has(n));
+              if (missing.length > 0) {
+                core.info(`Waiting: missing checks: ${missing.join(', ')}`);
+              } else {
+                const statuses = [...required].map(n => `${n}=${conc.get(n).status}/${conc.get(n).conclusion}`);
+                core.info(`Checks: ${statuses.join(' | ')}`);
+
+                const allCompleted = [...required].every(n => conc.get(n).status === 'completed');
+                const allSuccess = [...required].every(n => conc.get(n).conclusion === 'success');
+                const anyFailed = [...required].some(n => conc.get(n).status === 'completed' && conc.get(n).conclusion !== 'success');
+
+                if (allCompleted && allSuccess) break;
+                if (anyFailed) {
+                  throw new Error('Required checks completed but not successful; refusing to merge.');
+                }
+              }
+
+              if (Date.now() > deadlineMs) {
+                throw new Error('Timed out waiting for required checks; refusing to merge.');
+              }
+
+              await sleep(15_000);
+            }
+
+            // Re-check mergeability just before merging.
+            const prFinal = (await github.rest.pulls.get({ owner, repo, pull_number: prNumber })).data;
+            if (prFinal.state !== 'open') {
+              core.info(`PR #${prNumber} is not open (${prFinal.state}); skipping.`);
+              return;
+            }
+
+            if (prFinal.mergeable === false) {
+              throw new Error(`PR #${prNumber} is not mergeable (conflicts).`);
+            }
+
+            core.info(`Merging PR #${prNumber} (squash).`);
+            await github.rest.pulls.merge({
+              owner,
+              repo,
+              pull_number: prNumber,
+              merge_method: 'squash',
+            });
+
+            // Delete branch after merge.
+            core.info(`Deleting branch ${branch}.`);
+            await github.rest.git.deleteRef({ owner, repo, ref: `heads/${branch}` });
